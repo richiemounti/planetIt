@@ -1,0 +1,17 @@
+.bg-light {
+    background-color: #FFFFFF !important;
+}
+
+.site {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+.site-content {
+    flex: 1;
+}
+
+.fa-shopping-cart {
+    color: blue;
+}

@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block app_content %}
+    <main class="container mt-4">
+        <h2>Catalog Items</h2>
+        <a href="{{ url_for('admin.new') }}" class="btn btn-link">Add New Catalog Item</a>
+        {% if catalog_items %}
+            <table id="catalog_items" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Catalog Item</th>
+                        <th>Category</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        {% else %}
+            <p>We don't have any items in the catalog yet.</p>
+        {% endif %}
+    </main>
+{% endblock  %}
+
+{% block js %}
+    <script type="text/javascript">
+        var csrf_token = "{{ csrf_token() }}";
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrf_token);
+        }
+        }
+    });
+    </script>
+    <script>
+        $(document).ready(function () {
+            var table = $("#catalog_items").DataTable({
+            ajax: {
+                url: "/api/catalogitems",
+                dataSrc: ""
+            },
+            columns: [
+            {
+                data: "name",
+                render: function(data, type, catalog_item) {
+                return "<a href='/admin/details/" + catalog_item.id +
+                "'>" + catalog_item.name + "</a>";
+                }
+            },
+            {
+                data: "description"
+            },
+            {
+                render: function(data, type, catalog_item) {
+                return "<a href='/admin/edit/" + catalog_item.id + "'class='btn btn-secondary btn-sm'>Edit</a>";
+                }
+            },
+            {
+                data: "id",
+                render: function(data) {
+                return "<button class='btn btn-secondary btn-sm js-delete' data-catalog-item-id=" + data + ">Delete</button>";
+                }
+            }
+            ]
+            });
+        });
+    </script>
+    <script>
+        $("#catalog_items").on("click", ".js-delete", function () {
+        var button = $(this);
+        {% if current_user.is_admin() %}
+            bootbox.confirm("Are you sure you want to delete this catalog item?", function (result) {
+            if (result) {
+                $.ajax({
+                url: "/api/catalogitems/" + button.attr("data-catalog-item-id"),
+                method: "DELETE",
+                success: function () {
+                table.row(button.parents("tr")).remove().draw();
+                }
+            });
+            }
+        });
+        {% else %}
+            bootbox.confirm("Sorry, only for admin users", function(result){
+            });
+        {% endif %}
+  });
+</script>
+{% endblock  %}

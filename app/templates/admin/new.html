@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block app_content %}
+<main class="container mt-4">
+    <h2 class="mb-3">Catalog Item Form</h2>
+    <div class="row">
+        <div class="col-lg-6 col-sm-12 push-sm-12 px-4">
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.name.label }}
+                    {{ form.name(class_="form-control") }}
+                    {% for error in form.name.errors %}
+                        <span class="text-primary">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.description.label }}
+                    {{ form.description(class_="form-control") }}
+                    {% for error in form.description.errors %}
+                        <span class="text-primary">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.image_url.label }}
+                    {{ form.image_url(class_="form-control img-inp") }}
+                    {% for error in form.image_url.errors %}
+                        <span class="text-primary">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.price.label }}
+                    {{ form.price(class_="form-control") }}
+                    {% for error in form.price.errors %}
+                        <span class="text-primary">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.category_id.label }}
+                    {{ form.category_id(class_="form-control") }}
+                    {% for error in form.category_id.errors %}
+                        <span class="text-primary">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <div class="text-lg-left text-md-center text-sm-center text-xs=center">
+                    {% if current_user.is_admin() %}
+                        {{ form.submit(class="btn btn-primary") }}
+                    {% else %}
+                        {{ form.submit(class="btn btn-primary", disabled=True) }}
+                    {% endif %}
+                    <a class="btn btn-secondary" href="{{ url_for('admin.index') }}"> Go Back</a>
+                </div>
+            </form>
+        </div>
+        <div class="text-center col-lg-6 col-sm-12 px-4">
+            <img src="http://placehold.it/600x400" class="img-target" style="max-height:600px; max-width:400px;" alt="your image" />
+        </div>
+    </div>
+</main>
+{% endblock  %}
+
+{% block js %}
+    <script>
+        $(document).ready(function () {
+            $(".img-inp").change(function(){
+                $('.img-target').prop('src', this.value);
+            });
+        });
+    </script>
+{% endblock  %}

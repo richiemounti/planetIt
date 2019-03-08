@@ -1,0 +1,14 @@
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="{{ url_for('catalog.index')}}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{('Categories')}}
+    </a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        {% for category in categories %}
+            <a href="{{ url_for('auth.index', id=category.id)}}" class="dropdown-item">
+                {{ category.name | capitalize }}
+            </a>
+        {% endfor %}
+        <div class="dropdown-divider"></div>
+        <a href="{{ url_for('catalog.index') }}" class="dropdown-item"> ALL </a>
+    </div>
+</li>

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block app_content %}
+    <main class="container mt-4">
+        {% if config.DEVELOPMENT %}
+            <div class="jumbotron dev">
+        {% else %}
+            <div class="jumbotron prod">
+        {% endif %}
+            <h1> {{('Carthage')}} </h1>
+            
+            {% if current_user.is_anonymous %}
+                <p><a href="{{ url_for('account.register') }}" class="btn btn-primary">{{('Register') }}</a></p>
+                <p><a href="{{ url_for('account.login') }}" class="btn btn-secondary"> {{('Login') }}</a></p>
+            {% endif %}
+        
+            </div>
+        <div class="row">
+            <div class="col col-lg-6 col-sm-12">
+            </div>
+            <div class="col col-lg-6 col-sm-12">
+                <p> {{ ('This is a prototype E-Commerce application powered by Flask and
+                PostgreSQL. Users can browse a catalog, add catalog items to
+                their shopping cart, and make orders.') }} 
+                </p>
+                <p> {{ ('Application features include: custom admin feature,
+                authentication & authorization, full-text search, sessions, logging,
+                stripe integration, and localization (crude translations provided by
+                Google Translate).') }} 
+                </p>
+
+            </div>
+        </div>
+    </main>
+{% endblock  %}
+{% block js %}
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBCAN9EhXQ1kCSm1YrpMxVK0j6buc2MIlE"></script>
+    <script type="text/javascript">
+      var markers = [{
+          "title": 'Muji',
+          "lat": '35.6740674',
+          "lng": '139.7602891',
+          "description": 'Muji',
+          "type": 'Retail Store'
+      }]
+      window.onload = function () {
+          var mapOptions = {
+              center: new google.maps.LatLng(markers[0].lat, markers[0].lng),
+              zoom: 12,
+              mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            var infoWindow = new google.maps.InfoWindow();
+            var map = new google.maps.Map(document.getElementById("dvMap"), mapOptions);
+            for (i = 0; i < markers.length; i++) {
+                var data = markers[i]
+                var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+                var marker = new google.maps.Marker({
+                    position: myLatlng,
+                    map: map,
+                    title: data.title
+                });
+                (function (marker, data) {
+                    google.maps.event.addListener(marker, "click", function (e) {
+                        infoWindow.setContent(data.description);
+                        infoWindow.open(map, marker);
+                    });
+                })(marker, data);
+            }
+       }
+    </script>
+{% endblock  %}

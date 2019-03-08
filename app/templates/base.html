@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        {% if title %}
+            <title>{{ title }} - Carthage</title>
+        {% else %}
+            <title>{{ _('Welcome to Carthage')}}</title>
+        {% endif %}
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/4.0.0-beta.3/cosmo/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.css">
+        <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
+    </head>
+    <body class="site">
+        {% block navbar %}
+            {% include '_navbar.html' %}
+        {% endblock  %}
+
+        {% block content %}
+            <div class="container site-content">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function(event) {
+                                var messages = {{ messages | safe }};
+                                for (var i=0; i<messages.length; i++) {
+
+                                    new Noty({
+                                        theme: 'rellax',
+                                        type: 'info',
+                                        text: messages[i]
+                                    }).setTimeout(1500).show()
+                                }
+                            });
+                        </script>
+                    {% endif %}
+                {% endwith %}
+                {% block app_content %}
+                {% endblock  %}
+            </div>
+        {% endblock  %}
+
+        {% include '_footer.html' %}
+            <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+            <script src='https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js'></script>
+            <script src='https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js'></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.js"</script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        {% if config.DEVELOPMENT %}
+            <script src='http://localhost:5000/static/js/script.js'></script>
+        {% else %}
+            <script src='/static/js/script.js'></script>
+        {% endif %}
+            {% block js  %}{% endblock %}
+        
+    <script>
+        $(document).ready(function () {
+            $('.stripe-button-el').remove();
+        });
+   </script>
+   <script type="text/javascript">
+        $(document).ready(function () {
+            var csrf_token = "{{ csrf_token() }}";
+            $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                }
+            }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            var button;
+            $('#product_items').on("click", '.js-add-to-cart', addToCart);
+            function addToCart (e) {
+                e.preventDefault();
+                button = $(e.currentTarget)
+                console.log(button)
+                var productId = button.data("product-id");
+                console.log(productId)
+                addToCartService(productId, done, fail)
+            };
+            function updateCartCall() {
+                $.ajax({
+                    url: "/api/cartcomponent/",
+                    method: "GET",
+                    success: function (data) {
+                    console.log(data);
+                    $('#cart-status').text(data.quantity);
+                    },
+                });
+            }
+            function done(data) {
+                if (data.result != 0) {
+                    new Noty({
+                    theme: 'rellax',
+                    type: 'info',
+                    text: 'Item added to cart!'
+                }).setTimeout(1500).show();
+                }
+            };
+            function fail() {
+            alert("Something failed");
+            };
+            function addToCartService(productId, done, fail) {
+                $.ajax({
+                    url: "/api/cart/" + productId,
+                    method: "POST",
+                })
+                    .then(updateCartCall())
+                    .done(done)
+                    .fail(fail);
+                };
+            });
+    </script>
+    <script>
+        $(document).ready(function () {
+            var button;
+            $('#product_items').on("click", '.js-remove-from-cart', removeFromCart);
+            function removeFromCart (e) {
+                e.preventDefault();
+                button = $(e.currentTarget)
+                var productId = button.data("product-id");
+                removeFromCartService(productId, done, fail)
+            };
+            function updateCartCall() {
+                $.ajax({
+                    url: "/api/cartcomponent/",
+                    method: "GET",
+                    success: function (data) {
+                    $('#cart-status').text(data.quantity);
+                    },
+                });
+            }
+            function done(data) {
+                if (data.result != 0) {
+                    new Noty({
+                    theme: 'rellax',
+                    type: 'info',
+                    text: 'Item removed from cart!'
+                    }).setTimeout(1500).show();
+                }
+            };
+            function fail() {
+            alert("Something failed");
+            };
+            function removeFromCartService(productId, done, fail) {
+                $.ajax({
+                    url: "/api/cart/" + productId,
+                    method: "DELETE",
+                })
+                .then(updateCartCall())
+                .done(done)
+                .fail(fail);
+                };
+            });
+        </script>
+
+
+    </body>
+</html>

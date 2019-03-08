@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block page_title %}Page Not Found{% endblock %}
+
+{% block content %}
+<main class="container mt-4">
+<div class="jumbotron">
+  <div class="text-center">
+    <h1>403</h1>
+    <p>You are not authorized to see this page.</p>
+    <p>Want to <a href="{{ url_for('main.index') }}">go home</a> instead?</p>
+  </div>
+</div>
+</main>
+{% endblock %}

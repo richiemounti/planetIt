@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+    <main class="site-content mt-4">
+        {% if catalog_items %}
+            <h2 class="pb-2">{{ current_category | upper}}</h2>
+            <div class="text-left" style="max-width:160px">
+                <select class="price-sorting form-control" name="price-sorting">
+                    <option selected disabled>Default</option>
+                    <option value="asc">Low to high</option>
+                    <option value="desc">High to low</option>
+                </select>
+            </div>
+            <div class="container mt-2">
+                <div id = "product_items" class="row">
+                    {% for catalog_item in catalog_items %}
+                        {% include '/catalog/_product.html' %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <p> No catalog items found.</p>
+        {% endif %}
+    </main>
+{% endblock  %}
+
+{% block js %}
+    <script>
+        $(document).on("change", ".price-sorting", function() {
+                var sortingMethod = $(this).val();
+                if(sortingMethod == 'asc')
+                {
+                    sortProductsPriceAscending();
+                }
+                else if(sortingMethod == 'desc')
+                {   
+                    sortProductsPriceDescending();
+                }
+            function sortProductsPriceAscending()
+                {
+                    var products = $('.product');
+                    products.sort(function(a, b){ 
+                        return $(a)
+                        .data("price")-$(b).data("price")
+                    });
+                    $("#product_items").html(products);
+            }
+            function sortProductsPriceDescending()
+                {
+                    var products = $('.product');
+                    products.sort(function(a, b){ 
+                        return $(b)
+                        .data("price") - $(a).data("price")
+                    });
+                    $("#product_items").html(products);
+                }
+        });
+    </script>
+{% endblock  %}

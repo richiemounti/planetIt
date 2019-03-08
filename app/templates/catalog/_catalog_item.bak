@@ -1,0 +1,38 @@
+<div class="thumbnail">
+  <img alt="{{ catalog_item.name }} " src="{{ catalog_item.image_url }}"
+            style="max-height:100px;" />
+    <div class="caption-full">
+      <h3 class="pull-right">{{ catalog_item.price }}</h3>
+        <h3>
+          <a href="#">{{ catalog_item.name }}</a>
+        </h3>
+        <h4>{{ catalog_item.description }} </h4>
+        <p class="button">
+            <a href="{{ url_for('cart.add_to_cart', catalog_item_id=catalog_item.id) }}" class="btn
+              btn-primary">Add To Cart</a>
+        </p>
+        <p class="button">
+            <a href="{{ url_for('cart.remove_from_cart', catalog_item_id=catalog_item.id) }}" class="btn
+              btn-primary">Remove FROM  Cart</a>
+        </p>
+    </div>
+</div>
+
+
+    {% for category in categories %}
+      <table class = "ui celled padded table">
+        <thead>
+          <tr>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+          <td>
+            <span> {{ category.name }}</span>
+             <br><br>
+           </span>
+          </td>
+          </tr>
+        </tbody>
+      </table>
+    {% endfor %}

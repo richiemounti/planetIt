@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block app_content %}
+    <h1>Search Results</h1>
+    <div class="container mt-2">
+        <div id = "product_items" class="row">
+            {% for catalog_item in catalog_items %}
+                {% include 'catalog/_product.html' %}
+            {% endfor %}
+        </div>
+    </div> 
+{% endblock  %}

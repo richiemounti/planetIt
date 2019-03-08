@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block app_content %}
+    <main class="container mt-4">
+        <h2 class="mb-3">{{ catalog_item.name }}</h2>
+        <div class="row">
+            <div class="col-lg-6 col-sm-12 push-sm-12 px-4">
+                <ul class="list-group">
+                    <li class="list-group-item">Price: {{ "${:,.2f}".format(catalog_item.price) }}</li>
+                    <li class="list-group-item">Category: {{ catalog_item.category.name | capitalize}} </li>
+                    <li class="list-group-item">Description: {{ catalog_item.description }} </li>
+                </ul>
+                </br>
+                <div class="text-left">
+                    <a class="btn btn-secondary" href="{{ url_for('admin.index') }}"> Go Back</a>
+                </div>
+            </div>
+            <div class="text-center col-lg-6 col-sm-12 px-4">
+                <img src="{{ catalog_item.image_url }}" class="img-target" style="max-height:600px; max-width:400px;" alt="your image" />
+            </div>
+        </div>
+    </main>
+{% endblock  %}

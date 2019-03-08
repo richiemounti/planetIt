@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<main class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <section class="mb-6">
+        <form action="" method="post" class="form-signin">
+          <h2 class="h2 mb-3">Login</h2>
+          <hr />
+          {{ form.hidden_tag() }}
+          <div class="form-group">
+            {{ form.username.label }}
+            {{ form.username(class_="form-control") }}
+            {% for error in form.username.errors %}
+              <span class="text-primary">{{ error }}</span>
+            {% endfor %}
+          </div>
+          <div class="form-group">
+            {{ form.password.label }}
+            {{ form.password(class_="form-control") }}
+            {% for error in form.password.errors %}
+              <span class="text-primary">{{ error }}</span>
+            {% endfor %}
+          </div>
+          <div class="checkbox mb-3">
+            <label>
+              <div type="checkbox" value="remember-me">
+                {{ form.remember_me() }} {{ form.remember_me.label }}
+              </div>
+            </label>
+          </div>
+          {{ form.submit(class="btn btn-primary") }}
+        </form>
+        </br>
+        <div class="text-left mb-4">
+          New User? <a href="{{ url_for('account.register') }}"> Click to Register!</a>
+        </div>
+
+        <div id="demo_login" class="card-block">
+        <button 
+            type="submit"
+            data-username = "demo"
+            data-password = "P@ssw0rd!"
+            class="demo-user btn btn-seondary">
+            Demo User
+        </button>
+        <button 
+            type="submit"
+            data-username = "demo_admin"
+            data-password = "P@ssw0rd!"
+            class="demo-user btn btn-seondary">
+            Demo Admin
+        </button>
+        </div>
+
+      </section>
+    </div>
+  </div>
+</main>
+{% endblock %}
+{% block js %}
+  <script>
+    $(document).ready(function () {
+      var button;
+      var returnUrl;
+      $("#demo_login").on("click",'button.demo-user', loginUser);
+        function loginUser (e) {
+          button = $(e.target);
+          var username = button.attr("data-username");
+          var password = button.attr("data-password");
+          loginUserCall(username, password);
+        };
+        function loginUserCall(email, password) {
+          var data = {};
+          data.username = email;
+          data.password = password;
+          $.ajax({
+            url: "/api/account",
+            contentType: 'application/json',
+            dataType: 'json',
+            method: "POST",
+            data: JSON.stringify(data),
+            success: function (data) {
+            if (data.result != 0) {
+              new Noty({
+              text: 'Login Successful'
+              }).setTimeout(2000).show();
+              window.location= '/';
+              }
+            },
+            error: function(xhr, ajaxOptions, thrownError){
+            alert('something went wrong')  
+            },
+          });
+        }
+      })
+  </script>
+{% endblock  %}

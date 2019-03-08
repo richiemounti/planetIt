@@ -1,0 +1,47 @@
+<nav class="px-5 navbar navbar-expand-lg navbar-dark bg-dark"style="background-color:#000; color:#000;">
+    <a href="{{ url_for('auth.index') }}" class="navbar-brand"> {{('Carthage') }}</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+            {% if current_user.role and current_user.is_demo_admin() %}
+                <li class="nav-item">
+                    <a href="{{ url_for('admin.index') }}" class="nav-link">
+                        {{('Manage Catalog')}}
+                    </a>
+                </li>
+            {% endif %}
+            {% include '_category_menu.html' %}
+        </ul>
+
+        <ul class = "navbar-nav">
+
+            {% if g.search_form %}
+                <form class="navbar-form navbar-left" method="get" action="{{ url_for('catalog.index') }}">
+                    <div class="form-group">
+                        {{ g.search_form.q(size=20, class='form-control', placeholder=g.search_form.q.label.text) }}
+                    </div>
+                </form>
+            {% endif %}
+        
+            {% if current_user.is_anonymous %}
+                <li class="nav-item">
+                    <a href="{{ url_for('account.login') }}" class="nav-link">{{('Login') }}</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('account.register') }}" class="nav-link">{{('Register') }}</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <span><a href="#" class="nav-link">{{ current_user.username }}</a></span>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('account.logout') }}" class="nav-link">{{('Logout') }}</a>
+                </li>
+            {% endif %}
+
+            {% include '_cart_component.html' %}
+        </ul>
+    </div>
+</nav>

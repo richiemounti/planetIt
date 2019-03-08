@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block app_content %}
+    <main class="container mt-4">
+        <h2>Your shopping cart</h2>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Quantity</th>
+                    <th>Cart</th>
+                    <th class="text-right">Price</th>
+                    <th class="text-right">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for line in cart.cart_items %}
+                    <tr>
+                        <td class="text-center"> {{ line.amount }}</td>
+                        <td class="text-left">{{ line.catalog_item.name }}</td>
+                        <td class="text-right">{{ "${:,.2f}".format(line.catalog_item.price) }}</td>
+                        <td class="text-right">{{ "${:,.2f}".format(line.amount * line.catalog_item.price) }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" class="text-right">Total:</td>
+                    <td class="text-right">
+                        <span> {{ "${:,.2f}".format(cart_total) }}</span>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <form action="{{ url_for('order.charge') }}" method="POST">
+            <button type="submit" class="btn btn-primary">
+                PAY WITH CARD
+            </button>
+        </form>
+        <a href="{{ url_for('order.checkout') }}" class="btn btn-primary m-2">CHECKOUT</a>
+    </main>
+{% endblock  %}
