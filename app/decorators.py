@@ -21,5 +21,9 @@ def admin_required(f):
 def demo_admin_required(f):
     return permission_required(Permission.DEMO_ADMINISTER)(f)
 
-
+async def aasync(f):
+    def wrapper(*args, **kwargs):
+        t= Thread(target=f ,args=args, kwargs=kwargs)
+        t.start()
+    return wrapper
 

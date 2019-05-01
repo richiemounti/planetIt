@@ -5,13 +5,13 @@
         {% if title %}
             <title>{{ title }} - Carthage</title>
         {% else %}
-            <title>{{ _('Welcome to Carthage')}}</title>
+            <title>{{ ('Welcome to Carthage')}}</title>
         {% endif %}
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/4.0.0-beta.3/cosmo/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.css">
         <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
-        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
+        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.scss') }}">
     </head>
     <body class="site">
         {% block navbar %}

@@ -1,4 +1,4 @@
-from app.decorators import async
+from app.decorators import aasync
 from app.extensions import mail
 from flask_mail import Message
 

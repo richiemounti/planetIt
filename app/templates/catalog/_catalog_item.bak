@@ -13,7 +13,7 @@
         </p>
         <p class="button">
             <a href="{{ url_for('cart.remove_from_cart', catalog_item_id=catalog_item.id) }}" class="btn
-              btn-primary">Remove FROM  Cart</a>
+              btn-primary">Remove From  Cart</a>
         </p>
     </div>
 </div>

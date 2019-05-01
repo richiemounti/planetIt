@@ -32,25 +32,23 @@ def before_request():
     g.search_form = SearchForm()
 
 
-@catalog.route('/', defaults={'id': None})
-@catalog.route('/<int:id>')
-@catalog.route('/index/', defaults={'id': None})
-@catalog.route('/index/<int:id>')
+@catalog.route('/catalog', defaults={'id': None})
+@catalog.route('/catalog/<int:id>')
+@catalog.route('/catalog/index/', defaults={'id': None})
+@catalog.route('/catalog/index/<int:id>')
 def index(id):
     if id is None:
         catalog_items_query = CatalogItem.query
         current_category = 'All Items'
     else:
-        catalog_items_query = CatalogItem.query \
-            .filter_by(category_id=id)
-        current_category = Category.query \
-            .filter_by(id=id) \
-            .first_or_404().name
+        catalog_items_query = CatalogItem.query.filter_by(category_id=id)
+        current_category = Category.query.filter_by(id=id).first_or_404().name
     if g.search_form.validate():
         q = g.search_form.q.data,
         q = str(q).replace(" ", " or ")
         catalog_items_query = CatalogItem.query.search(q)
-    catalog_items = catalog_items_query.order_by(CatalogItem.name.desc())
+    catalog_items = catalog_items_query \
+        .order_by(CatalogItem.name.desc())
     categories = Category.query.order_by(Category.name.desc())
     cart_items = g.cart.cart_items
     cart_quantity = sum([item.amount for item in cart_items])

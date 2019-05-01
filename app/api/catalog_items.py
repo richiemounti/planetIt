@@ -10,7 +10,7 @@ from flask_login import login_required
 from sqlalchemy import func
 
 
-@api.route('/catalogitems', defaults={'query': None})
+@api.route('/api/catalogitems', defaults={'query': None})
 @login_required
 @demo_admin_required
 def get_catalog_items(query):
@@ -28,7 +28,7 @@ def get_catalog_items(query):
     return response
 
 
-@api.route('/catalogitems/<int:id>', methods=['DELETE'])
+@api.route('/api/catalogitems/<int:id>', methods=['DELETE'])
 @login_required
 @admin_required
 def delete_catalog_item(id):

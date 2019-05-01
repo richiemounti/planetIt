@@ -29,7 +29,7 @@ def before_request():
         db.session.add(g.cart)
 
 
-@api.route('/cart/<int:id>', methods=['POST'])
+@api.route('/api/cart/<int:id>', methods=['POST'])
 def add_to_cart(id):
     selected_catalog_item = CatalogItem.query \
         .filter_by(id=id) \
@@ -55,7 +55,7 @@ def add_to_cart(id):
     return jsonify({'result': 0})
 
 
-@api.route('/cart/<int:id>', methods=['DELETE'])
+@api.route('/api/cart/<int:id>', methods=['DELETE'])
 def remove_from_cart(id):
     selected_catalog_item = CatalogItem.query \
         .filter_by(id=id) \

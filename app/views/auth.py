@@ -23,9 +23,7 @@ def before_request():
     else:
         g.cart_id = str(uuid.uuid4())
         session['cart_id'] = g.cart_id
-    g.cart = Cart.query \
-        .filter_by(id=g.cart_id) \
-            .first()
+    g.cart = Cart.query.filter_by(id=g.cart_id).first()
     if g.cart is None:
         g.cart = Cart(id=g.cart_id)
         db.session.add(g.cart)
@@ -33,8 +31,7 @@ def before_request():
 @bp.route('/')
 @bp.route('/index')
 def index():
-    categories = Category.query \
-        .order_by(Category.name.desc())
+    categories = Category.query.order_by(Category.name.desc())
     cart_items = g.cart.cart_items
     cart_quantity = sum([item.amount for item in cart_items])
 

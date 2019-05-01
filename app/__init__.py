@@ -4,15 +4,17 @@ from flask import (
     current_app
 )
 
+from flask_session import Session
 from flask_login import LoginManager
-from flask_sqlalchemy import SQLAlchemy
 from config import DevelopmentConfig, Config
 from app.extensions import (
     csrf_protect,
     login,
     mail,
-    bcrypt
+    bcrypt,
+    db
 )
+
 
 
 app = Flask(__name__)
@@ -24,11 +26,12 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:mulama@localhost:
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db = SQLAlchemy(app)
+db.init_app(app)
 bcrypt.init_app(app)
 login.init_app(app)
 csrf_protect.init_app(app)
 mail.init_app(app)
+
 
 from app.views.auth import bp
 from app.accounts.account import account

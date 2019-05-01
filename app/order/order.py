@@ -58,7 +58,7 @@ def complete():
     
     '''
     send_email(app,
-               "StationaryShop Confirmation",
+               "Planet It Confirmation",
                [current_user.email],
                body)
     '''

@@ -35,16 +35,17 @@ def before_request():
         db.session.add(g.cart)
         
 
-@cart.route('/')
-@cart.route('/index')
+@cart.route('/cart')
+@cart.route('/cart/index')
 def index():
     cart_items = CartItem.query \
         .filter_by(cart_id=g.cart_id) \
         .all()
     g.cart.cart_items = cart_items
     cart_item_prices = [
-        cart_item.catalog_item_price for cart_item in cart_items
+        cart_item.catalog_item.price for cart_item in cart_items
     ]
+    cart_item_amounts = [cart_item.amount for cart_item in cart_items]
     cart_total = sum((a * p for a, p in zip(cart_item_prices,
                                             cart_item_amounts)))
     db.session.add(g.cart)

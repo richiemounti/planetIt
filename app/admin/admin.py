@@ -21,8 +21,8 @@ admin = Blueprint('admin', __name__)
 def require_login():
     pass
 
-@admin.route('/')
-@admin.route('/index')
+@admin.route('/admin')
+@admin.route('/admin/index')
 def index():
     catalog_items = CatalogItem.query.all()
     return render_template('admin/index.html',
@@ -31,10 +31,9 @@ def index():
                             )
 
 
-@admin.route('/new', methods=['GET', 'POST'])
+@admin.route('/admin/new', methods=['GET', 'POST'])
 def new():
-    categories = Category.query \
-        .all()
+    categories = Category.query.all()
     form = CatalogItemForm()
     form.category_id.choices = [(c.id, c.name) for c in categories]
     if form.validate_on_submit():
@@ -51,13 +50,10 @@ def new():
                             )
 
 
-@admin.route('/edit/<id>', methods=['GET', 'POST'])
+@admin.route('/admin/edit/<id>', methods=['GET', 'POST'])
 def edit(id):
-    catalog_item = CatalogItem.query \
-        .filter_by(id=id) \
-        .first_or_404()
-    categories = Category.query \
-        .all()
+    catalog_item = CatalogItem.query.filter_by(id=id).first_or_404()
+    categories = Category.query.all()
     form = CatalogItemForm(obj=catalog_item)
     form.category_id.choices = [
         (m.id, m.name) for m in categories
@@ -81,9 +77,7 @@ def edit(id):
 
 @admin.route('/details/<id>')
 def details(id):
-    catalog_item = CatalogItem.query \
-        .filter_by(id=id) \
-        .first_or_404()
+    catalog_item = CatalogItem.query.filter_by(id=id).first_or_404()
 
     return render_template('admin/details.html',
                             catalog_item=catalog_item,

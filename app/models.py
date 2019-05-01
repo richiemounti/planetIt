@@ -6,7 +6,6 @@ from sqlalchemy import Sequence
 from sqlalchemy_searchable import SearchQueryMixin, make_searchable
 from sqlalchemy_utils import TSVectorType
 from app import db
-import json
 
 
 db.configure_mappers()
@@ -142,15 +141,18 @@ class CartItem(db.Model):
     amount = db.Column(db.Integer)
     cart_id = db.Column(db.String, db.ForeignKey('carts.id'))
     catalog_item_id = db.Column(db.Integer, db.ForeignKey('catalog_items.id', ondelete='CASCADE'))
-
+    
     catalog_item = db.relationship(
         'CatalogItem'
     )
 
+class CatalogItemQuery(BaseQuery, SearchQueryMixin):
+    pass
+
 class CatalogItem(db.Model):
+    query_class = CatalogItemQuery
     __tablename__ = 'catalog_items'
     
-
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Unicode(50))
     description = db.Column(db.String(140))
